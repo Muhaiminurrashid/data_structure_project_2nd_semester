@@ -26,7 +26,8 @@ void Water(Account *temp);
 void Check_Balance(Account *temp);
 void Save_Accounts_To_File();
 void Load_Accounts_From_File();
-void Transaction();
+void Change_Pin(Account *temp);
+void Transaction(Account *temp);
 
 Account *head = NULL;
 
@@ -150,7 +151,7 @@ void Login()
                     temp = temp->next;
                 }
         }
-    printf("Invalid Phone Number or Pin\n");
+    printf("Invalid Phone Number or Pin, Please Try Again\n");
 }
 void User_Menu(Account *temp)
 {
@@ -165,7 +166,8 @@ void User_Menu(Account *temp)
             printf("5. Cash In\n");
             printf("6. Transcation\n");
             printf("7. Check Balance\n");
-            printf("8. Exit\n");
+            printf("8. Change Pin\n");
+            printf("9. Exit\n");
             printf("Enter Your Choice\n");
             scanf("%d",&Choice);
 
@@ -187,12 +189,15 @@ void User_Menu(Account *temp)
                     Cash_In(temp);
                     break;
                 case 6:
-                    Transaction();
+                    Transaction(temp);
                     break;
                 case 7:
                     Check_Balance(temp);
                     break;
                 case 8:
+                    Change_Pin(temp);
+                    break;
+                case 9:
                     return;
                 default:
                     printf("Invalid choice. Try again.\n");
@@ -229,7 +234,7 @@ void Send_Money(Account *temp)
                 }
             else
                 {
-                    printf("Invalid Pin\n");
+                    printf("Invalid Pin, Please Try Again\n");
                 }
         }
 }
@@ -263,7 +268,7 @@ void Mobile_Recharge(Account *temp)
                 }
             else
                 {
-                    printf("Invalid Pin\n");
+                    printf("Invalid Pin, Please Try Again\n");
                 }
         }
 }
@@ -294,7 +299,7 @@ void Cash_Out(Account *temp)
                 }
             else
                 {
-                    printf("Invalid Pin\n");
+                    printf("Invalid Pin, Please Try Again\n");
                 }
         }
 }
@@ -380,7 +385,7 @@ void Electricity(Account *temp)
                 }
             else
                 {
-                    printf("Invalid Pin\n");
+                    printf("Invalid Pin, Please Try Again\n");
                 }
         }
 }
@@ -415,7 +420,7 @@ void Gas(Account *temp)
                 }
             else
                 {
-                    printf("Invalid Pin\n");
+                    printf("Invalid Pin, Please Try Again\n");
                 }
         }
 }
@@ -450,7 +455,7 @@ void Internet(Account *temp)
                 }
             else
                 {
-                    printf("Invalid Pin\n");
+                    printf("Invalid Pin, Please Try Again\n");
                 }
         }
 }
@@ -485,7 +490,30 @@ void Water(Account *temp)
                 }
             else
                 {
-                    printf("Invalid Pin\n");
+                    printf("Invalid Pin, Please Try Again\n");
+                }
+        }
+}
+void Change_Pin(Account *temp)
+{
+    printf("Enter Your Old Pin\n");
+    char old_pin[4];
+    while(1)
+        {
+            scanf("%s",old_pin);
+            if (strcmp(temp->pin,old_pin)==0)
+                {
+                    printf("Enter New Pin\n");
+                    char new_pin[4];
+                    scanf("%s",new_pin);
+                    strcpy(temp->pin, new_pin);
+                    printf("Changed Pin Successfully\n");
+                    Save_Accounts_To_File(); // Save changes after changing pin
+                    break;
+                }
+            else
+                {
+                    printf("Invalid Pin, Please Try Again\n");
                 }
         }
 }
