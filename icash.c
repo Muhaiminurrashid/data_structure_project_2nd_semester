@@ -1,3 +1,4 @@
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -6,7 +7,7 @@ typedef struct Account
 {
     char Phone_Number[13];
     int Balance;
-    char pin[10];
+    char pin[13];
     struct Account *next;
 } Account;
 
@@ -27,7 +28,7 @@ void Check_Balance(Account *temp);
 void Save_Accounts_To_File();
 void Load_Accounts_From_File();
 void Change_Pin(Account *temp);
-void Transaction(Account *temp);
+void Transaction();
 
 Account *head = NULL;
 
@@ -37,38 +38,62 @@ int main()
     Main_Menu();
     Save_Accounts_To_File();
 }
-void Main_Menu()
-{
+/*
+//DEBUG
+void Debug_Show_All_Accounts_From_File() {
+    printf("\n--- DEBUG: Showing All Accounts from File ---\n");
+
+    FILE *file = fopen("accounts.dat", "rb");
+    if (!file) {
+        printf("No saved accounts found or file could not be opened.\n");
+        return;
+    }
+
+    Account temp;
+    while (fread(&temp, sizeof(Account), 1, file)) {
+        printf("Phone Number: %s\n", temp.Phone_Number);
+        printf("Balance: %d\n", temp.Balance);
+        printf("Pin: %s\n", temp.pin);
+        printf("---------------------------\n");
+    }
+
+    fclose(file);
+}
+*/
+void Main_Menu() {
     int Choice;
     printf("--------WELCOME TO ICASH----------\n\n\n");
-    while(1)
-        {
-
-            printf("1. Create New Account\n");
-            printf("2. Login\n");
-            printf("3. Exit\n");
-            scanf("%d",&Choice);
-            switch(Choice)
-                {
-                case 1:
-                    Create_New_Account();
-                    break;
-                case 2:
-                    Login();
-                    break;
-                case 3:
-                    exit(0);
-                default:
-                    printf("Invalid choice. Try again.\n");
-                }
+    while (1) {
+        printf("1. Create New Account\n");
+        printf("2. Login\n");
+        //printf("3. Debug: Show All Accounts from File\n");
+        printf("5. Exit\n");
+        scanf("%d", &Choice);
+        switch (Choice) {
+            case 1:
+                Create_New_Account();
+                break;
+            case 2:
+                Login();
+                break;
+                /*
+            case 4:
+                Debug_Show_All_Accounts_From_File(); // From file
+                break;*/
+            case 5:
+                exit(0);
+            default:
+                printf("Invalid choice. Try again.\n");
         }
+    }
 }
+
 void Save_Accounts_To_File()
 {
     FILE *file = fopen("accounts.dat", "wb");
     if (!file)
         {
-            printf("Error: Could not open file for saving.\n");
+            //printf("Error: Could not open file for saving.\n");
             return;
         }
 
@@ -80,7 +105,7 @@ void Save_Accounts_To_File()
         }
 
     fclose(file);
-    printf("Accounts saved to file successfully.\n");
+   // printf("Accounts saved to file successfully.\n");
 }
 
 void Load_Accounts_From_File()
@@ -88,7 +113,7 @@ void Load_Accounts_From_File()
     FILE *file = fopen("accounts.dat", "rb");
     if (!file)
         {
-            printf("No saved accounts found.\n\n\n");
+            //printf("No saved accounts found.\n\n\n");
             return;
         }
 
@@ -102,7 +127,7 @@ void Load_Accounts_From_File()
         }
 
     fclose(file);
-    printf("Accounts loaded from file successfully.\n");
+    //printf("Accounts loaded from file successfully.\n");
 }
 void Create_New_Account()
 {
@@ -132,11 +157,11 @@ void Login()
 {
     Account *temp = head;
     char Phone_Number[13];
-    printf("Loggin In...........\n");
+    //printf("Loggin In...........\n");
     printf("Enter Your Phone Number\n");
     scanf("%s",Phone_Number);
     printf("Enter Your Pin\n");
-    char pin[4];
+    char pin[13];
     scanf("%s",pin);
     while(temp!=NULL)
         {
@@ -189,7 +214,7 @@ void User_Menu(Account *temp)
                     Cash_In(temp);
                     break;
                 case 6:
-                    Transaction(temp);
+                    Transaction();
                     break;
                 case 7:
                     Check_Balance(temp);
@@ -214,9 +239,9 @@ void Send_Money(Account *temp)
     scanf("%d",&Ammount);
     printf("Enter Your Pin\n");
     char pin[4];
-    scanf("%s",pin);
     while(1)
         {
+    scanf("%s",pin);
             if (strcmp(temp->pin,pin)==0)
                 {
                     if (temp->Balance >= Ammount)
@@ -247,10 +272,10 @@ void Mobile_Recharge(Account *temp)
     int Ammount;
     scanf("%d",&Ammount);
     printf("Enter Your Pin\n");
-    char pin[4];
-    scanf("%s",pin);
+    char pin[13];
     while(1)
         {
+    scanf("%s",pin);
             if (strcmp(temp->pin,pin)==0)
                 {
                     if (temp->Balance >= Ammount)
@@ -278,10 +303,10 @@ void Cash_Out(Account *temp)
     printf("Enter The Ammount\n");
     scanf("%d",&Ammount);
     printf("Enter Your Pin\n");
-    char pin[4];
-    scanf("%s",pin);
+    char pin[13];
     while(1)
         {
+    scanf("%s",pin);
             if (strcmp(temp->pin,pin)==0)
                 {
                     if (temp->Balance >= Ammount)
@@ -340,7 +365,7 @@ void Pay_Bill(Account *temp)
 }
 void Check_Balance(Account *temp)
 {
-    printf("Current Balance is %d\n",temp->Balance);
+    printf("Current Balance is %d Taka\n",temp->Balance);
 }
 void Cash_In(Account *temp)
 {
@@ -364,10 +389,10 @@ void Electricity(Account *temp)
     int Ammount;
     scanf("%d",&Ammount);
     printf("Enter Your Pin\n");
-    char pin[4];
-    scanf("%s",pin);
+    char pin[13];
     while(1)
         {
+    scanf("%s",pin);
             if (strcmp(temp->pin,pin)==0)
                 {
                     if (temp->Balance >= Ammount)
@@ -399,10 +424,10 @@ void Gas(Account *temp)
     int Ammount;
     scanf("%d",&Ammount);
     printf("Enter Your Pin\n");
-    char pin[4];
-    scanf("%s",pin);
+    char pin[13];
     while(1)
         {
+    scanf("%s",pin);
             if (strcmp(temp->pin,pin)==0)
                 {
                     if (temp->Balance >= Ammount)
@@ -434,10 +459,10 @@ void Internet(Account *temp)
     int Ammount;
     scanf("%d",&Ammount);
     printf("Enter Your Pin\n");
-    char pin[4];
-    scanf("%s",pin);
+    char pin[13];
     while(1)
         {
+    scanf("%s",pin);
             if (strcmp(temp->pin,pin)==0)
                 {
                     if (temp->Balance >= Ammount)
@@ -469,10 +494,10 @@ void Water(Account *temp)
     int Ammount;
     scanf("%d",&Ammount);
     printf("Enter Your Pin\n");
-    char pin[4];
-    scanf("%s",pin);
+    char pin[13];
     while(1)
         {
+    scanf("%s",pin);
             if (strcmp(temp->pin,pin)==0)
                 {
                     if (temp->Balance >= Ammount)
@@ -497,7 +522,7 @@ void Water(Account *temp)
 void Change_Pin(Account *temp)
 {
     printf("Enter Your Old Pin\n");
-    char old_pin[4];
+    char old_pin[13];
     while(1)
         {
             scanf("%s",old_pin);
@@ -521,5 +546,4 @@ void Transaction(Account *temp)
 {
     printf("Transaction is Coming Soon!\n");
 }
-
 
