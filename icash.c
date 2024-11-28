@@ -14,7 +14,7 @@ void Create_New_Account();
 void Login();
 void Main_Menu();
 void User_Menu(Account *temp);
-void Send_Money(Account *temp);
+void Send_Money_Non_iCash_User(Account *temp);
 void Admin();
 void Mobile_Recharge(Account *temp);
 void Cash_Out(Account *temp);
@@ -34,6 +34,8 @@ void line_break();
 void border_line();
 void retry_pass();
 void insufi_balance();
+void Send_Money_iCash_User(Account *temp);
+
 Account *head = NULL;
 
 int main()
@@ -55,7 +57,7 @@ void Main_Menu()
             printf("1. Create New Account\n");
             printf("2. Login\n");
             printf("3. Admin Login\n");
-            printf("5. Exit\n\n");
+            printf("4. Exit\n\n");
             printf("Enter Your Choice\n");
             scanf("%d", &Choice);
             switch (Choice)
@@ -70,7 +72,7 @@ void Main_Menu()
                 case 3:
                     Admin();
                     break;
-                case 5:
+                case 4:
                     exit(0);
                 default:
                     printf("Invalid choice. Try again.\n");
@@ -158,12 +160,12 @@ void User_Menu(Account *temp)
             printf(" \t\t\t\t ===============\n");
             printf(" \t\t\t\t || USER MENU || ");
             printf("\n\t\t\t\t ===============\n\n");
-            printf("1. Send Money\n");
+            printf("1. Send Money To iCash User\n");
             printf("2. Mobile Recharge\n");
             printf("3. Cash Out\n");
             printf("4. Pay Bill\n");
             printf("5. Cash In\n");
-            printf("6. Transcation\n");
+            printf("6. Send Money Non iCash_User\n");
             printf("7. Check Balance\n");
             printf("8. Change Pin\n");
             printf("9. Exit\n");
@@ -173,7 +175,7 @@ void User_Menu(Account *temp)
             switch(Choice)
                 {
                 case 1:
-                    Send_Money(temp);
+                    Send_Money_iCash_User(temp);
                     break;
                 case 2:
                     Mobile_Recharge(temp);
@@ -188,7 +190,7 @@ void User_Menu(Account *temp)
                     Cash_In(temp);
                     break;
                 case 6:
-                    Transaction();
+                    Send_Money_Non_iCash_User(temp);
                     break;
                 case 7:
                     Check_Balance(temp);
@@ -203,7 +205,54 @@ void User_Menu(Account *temp)
                 }
         }
 }
-void Send_Money(Account *temp)
+void Send_Money_iCash_User(Account *temp)
+{
+    printf("Enter Recipent's Phone Number\n");
+    char Phone_Number[13];
+    scanf("%s",Phone_Number);
+    int Ammount;
+    char pin[13];
+    Account *current = head;
+    while(current != NULL)
+        {
+            if (strcmp(current->Phone_Number,Phone_Number)==0 && strcmp(temp->Phone_Number,Phone_Number))
+                {
+                    printf("Enter The Ammount\n");
+                    scanf("%d",&Ammount);
+                    while(1)
+                        {
+                            printf("Enter Your Pin\n");
+                            scanf("%s",pin);
+                            if (strcmp(temp->pin,pin)==0)
+                                {
+                                    if (temp->Balance >= Ammount)
+                                        {
+                                            temp->Balance -= Ammount;
+                                            current->Balance += Ammount;
+                                            printf("\n\nSend %d Taka To %s Successfull\n\n\n",Ammount,Phone_Number);
+                                            Check_Balance(temp);
+                                            Save_Accounts_To_File(); // Save changes after money transfer
+                                            return;
+                                        }
+                                    else
+                                        {
+                                            insufi_balance();
+                                        }
+                                    break;
+                                }
+                            else
+                                {
+                                    retry_pass();
+                                }
+                        }
+                }
+
+            current=current->next;
+        }
+    printf("\nInvalid Request!!!!\n\n");
+}
+
+void Send_Money_Non_iCash_User(Account *temp)
 {
     printf("Enter Recipent's Phone Number\n");
     char Phone_Number[13];
@@ -346,7 +395,7 @@ void Cash_In(Account *temp)
     printf("Enter The Ammount\n");
     scanf("%d",&Ammount);
     temp->Balance += Ammount;
-    printf("Cash In Successfull\n");
+    printf("\n***Cash In Successfull***\n\n");
     Save_Accounts_To_File(); // Save changes after cash in
     Check_Balance(temp);
 }
@@ -554,11 +603,11 @@ void Save_Accounts_To_File()
             return;
         }
 
-    Account *current = head;
-    while (current != NULL)
+    Account *Current = head;
+    while (Current != NULL)
         {
-            fwrite(current, sizeof(Account), 1, file);
-            current = current->next;
+            fwrite(Current, sizeof(Account), 1, file);
+            Current = Current->next;
         }
 
     fclose(file);
