@@ -168,7 +168,8 @@ void User_Menu(Account *temp)
             printf("6. Send Money Non iCash_User\n");
             printf("7. Check Balance\n");
             printf("8. Change Pin\n");
-            printf("9. Exit\n");
+            printf("9. Transacation\n");
+            printf("10. Exit\n");
             printf("\nEnter Your Choice\n");
             scanf("%d",&Choice);
 
@@ -199,6 +200,9 @@ void User_Menu(Account *temp)
                     Change_Pin(temp);
                     break;
                 case 9:
+                    Transaction();
+                    break;
+                case 10:
                     return;
                 default:
                     printf("Invalid choice. Try again.\n\n");
@@ -229,7 +233,7 @@ void Send_Money_iCash_User(Account *temp)
                                         {
                                             temp->Balance -= Ammount;
                                             current->Balance += Ammount;
-                                            printf("\n\nSend %d Taka To %s Successfull\n\n\n",Ammount,Phone_Number);
+                                            printf("\n\n***Send %d Taka To %s Successfull***\n\n\n",Ammount,Phone_Number);
                                             Check_Balance(temp);
                                             Save_Accounts_To_File(); // Save changes after money transfer
                                             return;
@@ -270,7 +274,7 @@ void Send_Money_Non_iCash_User(Account *temp)
                     if (temp->Balance >= Ammount)
                         {
                             temp->Balance -= Ammount;
-                            printf("\n\nSend Money To %s Successfull\n\n\n",Phone_Number);
+                            printf("\n\n***Send Money To %s Successfull***\n\n\n",Phone_Number);
                             Check_Balance(temp);
                             Save_Accounts_To_File(); // Save changes after money transfer
                         }
@@ -304,7 +308,7 @@ void Mobile_Recharge(Account *temp)
                     if (temp->Balance >= Ammount)
                         {
                             temp->Balance -= Ammount;
-                            printf("Recharge %d Taka to %s Successfull\n\n\n",Ammount,Phone_Number);
+                            printf("***Recharge %d Taka to %s Successfull***\n\n\n",Ammount,Phone_Number);
                             Save_Accounts_To_File(); // Save changes after sending money
                             Check_Balance(temp);
                         }
@@ -335,7 +339,7 @@ void Cash_Out(Account *temp)
                     if (temp->Balance >= Ammount)
                         {
                             temp->Balance -= Ammount;
-                            printf("Cash Out Successfull\n\n\n");
+                            printf("***Cash Out Successfull***\n\n\n");
                             Save_Accounts_To_File(); // Save changes after cash out
                             Check_Balance(temp);
                         }
@@ -567,12 +571,13 @@ void Change_Pin(Account *temp)
 void Transaction(Account *temp)
 {
     printf("Transaction is Coming Soon!\n");
+    border_line();
 }
 void Debug_Show_All_Accounts_From_File()
 {
-    printf(" \t\t\t =================\n");
-    printf(" \t\t\t ||  User Data  || ");
-    printf("\n\t\t\t =================\n\n");
+    printf(" \t\t\t\t =================\n");
+    printf(" \t\t\t\t ||  User Data  || ");
+    printf("\n\t\t\t\t =================\n\n");
     line_break();
 
     FILE *file = fopen("accounts.dat", "rb");
