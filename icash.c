@@ -10,31 +10,31 @@ typedef struct Account
     struct Account *next;
 } Account;
 
-void Create_New_Account();
-void Login();
-void Main_Menu();
-void User_Menu(Account *temp);
-void Send_Money_Non_iCash_User(Account *temp);
-void Admin();
-void Mobile_Recharge(Account *temp);
-void Cash_Out(Account *temp);
-void Cash_In(Account *temp);
-void Pay_Bill(Account *temp);
+void Main_Menu();  //48
+void Admin();   //83
+void Create_New_Account(); //111
+void Login(); //128
+void User_Menu(Account *temp);  //155
+void Send_Money_iCash_User(Account *temp); //212
+void Send_Money_Non_iCash_User(Account *temp); //259
+void Mobile_Recharge(Account *temp); //293
+void Cash_Out(Account *temp); //327
+void Cash_In(Account *temp); //396
+void Pay_Bill(Account *temp); //359
 void Electricity(Account *temp);
 void Gas(Account *temp);
 void Internet(Account *temp);
 void Water(Account *temp);
-void Check_Balance(Account *temp);
-void Save_Accounts_To_File();
-void Load_Accounts_From_File();
-void Change_Pin(Account *temp);
-void Debug_Show_All_Accounts_From_File();
+void Change_Pin(Account *temp); //548
+void Check_Balance(Account *temp); //655
+void Debug_Show_All_Accounts_From_File(); //576
+void Save_Accounts_To_File(); //619
+void Load_Accounts_From_File(); //601
 void Transaction();
 void line_break();
 void border_line();
 void retry_pass();
 void insufi_balance();
-void Send_Money_iCash_User(Account *temp);
 
 Account *head = NULL;
 
@@ -308,7 +308,7 @@ void Mobile_Recharge(Account *temp)
                     if (temp->Balance >= Ammount)
                         {
                             temp->Balance -= Ammount;
-                            printf("***Recharge %d Taka to %s Successfull***\n\n\n",Ammount,Phone_Number);
+                            printf("\n\n***Recharge %d Taka to %s Successfull***\n\n\n",Ammount,Phone_Number);
                             Save_Accounts_To_File(); // Save changes after sending money
                             Check_Balance(temp);
                         }
@@ -339,7 +339,7 @@ void Cash_Out(Account *temp)
                     if (temp->Balance >= Ammount)
                         {
                             temp->Balance -= Ammount;
-                            printf("***Cash Out Successfull***\n\n\n");
+                            printf("\n\n***Cash Out Successfull***\n\n\n");
                             Save_Accounts_To_File(); // Save changes after cash out
                             Check_Balance(temp);
                         }
@@ -555,7 +555,7 @@ void Change_Pin(Account *temp)
             if (strcmp(temp->pin,old_pin)==0)
                 {
                     printf("Enter New Pin\n");
-                    char new_pin[4];
+                    char new_pin[13];
                     scanf("%s",new_pin);
                     strcpy(temp->pin, new_pin);
                     printf("\n\n***Changed Pin Successfully***\n\n");
@@ -581,11 +581,7 @@ void Debug_Show_All_Accounts_From_File()
     line_break();
 
     FILE *file = fopen("accounts.dat", "rb");
-    if (!file)
-        {
-            //printf("No saved accounts found or file could not be opened.\n");
-            return;
-        }
+    if (!file) return;
 
     Account temp;
     while (fread(&temp, sizeof(Account), 1, file))
@@ -602,11 +598,7 @@ void Debug_Show_All_Accounts_From_File()
 void Save_Accounts_To_File()
 {
     FILE *file = fopen("accounts.dat", "wb");
-    if (!file)
-        {
-            //printf("Error: Could not open file for saving.\n");
-            return;
-        }
+    if (!file) return;
 
     Account *Current = head;
     while (Current != NULL)
@@ -616,16 +608,12 @@ void Save_Accounts_To_File()
         }
 
     fclose(file);
-    // printf("Accounts saved to file successfully.\n");
+
 }
 void Load_Accounts_From_File()
 {
     FILE *file = fopen("accounts.dat", "rb");
-    if (!file)
-        {
-            //printf("No saved accounts found.\n\n\n");
-            return;
-        }
+    if (!file) return;
 
     Account temp;
     while (fread(&temp, sizeof(Account), 1, file))
@@ -637,7 +625,7 @@ void Load_Accounts_From_File()
         }
 
     fclose(file);
-    //printf("Accounts loaded from file successfully.\n");
+
 }
 void border_line()
 {
